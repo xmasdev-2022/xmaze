@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "weekly"
 
-  - package_ecosystem: "submodules"
-    directory: .
+  - package-ecosystem: "submodules"
+    directory: "/"
     schedule:
       interval: "daily"
