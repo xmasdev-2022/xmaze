@@ -4,3 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  - package_ecosystem: "submodules"
+    directory: .
+    schedule:
+      interval: "daily"
