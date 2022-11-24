@@ -34,13 +34,18 @@ jobs:
   
 
   provision:
+    name: Provision Azure
     needs: [build_staticsite]
     runs-on: ubuntu-latest
     environment: production
-    name: Provision Azure
+
     permissions:
       id-token: write
       contents: read
+
+    defaults:
+      run:
+        working-directory: 'xmaze-infra'
 
     steps:
       - name: Checkout repository
@@ -59,12 +64,13 @@ jobs:
         with:
           inlineScript: |
             az group create -g ${{ secrets.RESOURCE_GROUP }} -l ${{ secrets.RESOURCE_GROUP_LOCATION }}
+            
       - name: Deploy Bicep
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          template: ./deploy/main.bicep
+          template: ./main.bicep
           parameters: swaName=${{ secrets.SWA_NAME }}
           failOnStdErr: false
 
