@@ -73,7 +73,7 @@ jobs:
           resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template: ./xmaze-infra/main.bicep
-          parameters: swaName=${{ secrets.SWA_NAME }}
+          parameters: swaName=${{ secrets.SWA_NAME }} location=${{ secrets.RESOURCE_GROUP_LOCATION }}
           failOnStdErr: false
 
   
