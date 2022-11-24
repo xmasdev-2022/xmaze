@@ -1,0 +1,74 @@
+name: Build and deploy
+env:
+  OUTPUT_FOLDER: dist
+  DOTNET_VERSION: "7.x"
+
+on:
+  workflow_call:
+    inputs:
+      preview:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build_staticsite:
+    runs-on: ubuntu-latest
+    environment: build
+    defaults:
+      run:
+        working-directory: 'xmaze-static'
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: bahmutov/npm-install@v1.4.5
+        with:
+          working-directory: packages/frontend-app
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish website output
+        uses: actions/upload-artifact@v3
+        with:
+          name: website
+          path: ${{ env.OUTPUT_FOLDER }}
+
+  
+
+  provision:
+    needs: [build_staticsite]
+    runs-on: ubuntu-latest
+    environment: production
+    name: Provision Azure
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Ensure resource group exists
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az group create -g ${{ secrets.RESOURCE_GROUP }} -l ${{ secrets.RESOURCE_GROUP_LOCATION }}
+      - name: Deploy Bicep
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          template: ./deploy/main.bicep
+          parameters: swaName=${{ secrets.SWA_NAME }}
+          failOnStdErr: false
+
+  
