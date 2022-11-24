@@ -1,0 +1,9 @@
+[submodule "xmaze-api"]
+	path = xmaze-api
+	url = https://github.com/xmasdev-2022/xmaze-api.git
+[submodule "xmaze-infra"]
+	path = xmaze-infra
+	url = https://github.com/xmasdev-2022/xmaze-infra.git
+[submodule "xmaze-static"]
+	path = xmaze-static
+	url = https://github.com/xmasdev-2022/xmaze-static.git
