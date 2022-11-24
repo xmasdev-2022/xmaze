@@ -12,11 +12,15 @@ jobs:
     environment: build
     defaults:
       run:
-        working-directory: 'xmaze-static'
+        working-directory: xmaze-static
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - uses: bahmutov/npm-install@v1.4.5
+        with:
+          working-directory: xmaze-static
 
       - name: Build
         run: npm run build
