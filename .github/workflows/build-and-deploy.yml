@@ -9,7 +9,6 @@ jobs:
   build_staticsite:
     name: Build Static Site
     runs-on: ubuntu-latest
-    if: false
     environment: build
     defaults:
       run:
