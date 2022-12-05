@@ -82,6 +82,10 @@ jobs:
     needs: [build_staticsite, provision]
     runs-on: ubuntu-latest
     environment: production
+    
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
