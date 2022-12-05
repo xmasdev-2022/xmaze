@@ -113,7 +113,6 @@ jobs:
           azure_static_web_apps_api_token: ${{ env.SWA_DEPLOYMENT_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          cwd: website
           skip_app_build: true
           skip_api_build: true
 
